@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Member">
+ 
+ 	<!-- 회원가입 1-->
+	<insert id = "insertUser" parameterType="member">
+		insert into member(  m_id,  m_name, m_email, m_phone, m_date) 
+		values(#{m_id}, #{m_name}, #{m_email}, #{m_phone}, sysdate)
+	</insert>
+	
+	<!-- 회원가입2 -->
+	<insert id="insertUser_Detail" parameterType="member_detail">
+		insert into member_detail( m_id, m_pw)
+		values(#{m_id},#{m_pw})
+	</insert>
+	
+	<!-- 아이디 중복체크 -->
+	<select id="idCheck" parameterType="String" resultType="String"> 
+		select m_id from member where m_id=#{m_id}
+	</select>
+	
+	<!-- 로그인 체크 -->
+	 <select id="loginCheck" resultType="String" parameterType="map">
+        select mem.m_id
+    	from member mem
+   		inner
+    	join member_detail mem_de
+    	on mem.m_id=mem_de.m_id
+   	    where mem.m_id=#{m_id} and mem_de.m_pw=#{m_pw}
+    </select>
+    
+    <!-- 02.qna목록 페이징-->
+ 	<select id="u_getQnaList" parameterType="map" resultType="qna">
+ 		select * from (select a.*, rownum rnum 
+        	from (select  * from qna order by q_seq desc) a )
+        	<![CDATA[
+      		where rnum>=#{start} and rnum<=#{end}
+         	]]>     
+ 	</select>
+ 	
+ 	<!-- qna 정보 -->
+ 	<select id="u_viewQna" parameterType="int" resultType="qna">
+ 		select * from qna where q_seq=#{q_seq}
+ 	</select>
+ 	
+ 	<!-- 공지목록 페이징-->
+ 	<select id="u_getNoticeList" resultType="notice">
+ 		select * from notice order by n_write_date asc
+ 	</select>
+ 	
+ 	<!-- 총 qna 레코드 -->
+ 	<select id="u_getQnaCount" resultType="int">
+ 		select count(*) from qna
+ 	</select>
+ 	
+ 	<!-- 총 공지 레코드 -->
+ 	<select id="u_getNoticeCount" resultType="int">
+ 		select count(*) from notice
+ 	</select> 
+ 	
+ 	 <!-- 공지사항 정보 -->
+ 	<select id="u_viewNotice" parameterType="int" resultType="notice">
+ 		select * from notice where n_seq=#{n_seq}
+ 	</select>
+ 	
+ 	<!-- qna 작성  -->
+ 	<insert id="u_insertQna" parameterType="qna">
+ 		insert into qna values((select nvl(max(q_seq),0)+1 from qna),#{m_id},#{q_subject},#{q_content},to_char(sysdate,'YYYY-MM-DD HH24:MI'))
+ 	</insert>
+ 	
+ 	<!-- qna 수정 -->
+ 	<update id="u_updateQna" parameterType="qna">
+ 		update qna set q_subject=#{q_subject},q_content=#{q_content} 
+ 		where q_seq=#{q_seq} and m_id=#{m_id}
+ 	</update>
+ 	
+ 	<!-- qna 삭제 -->
+ 	<delete id="u_deleteQna" parameterType="qna">
+ 		delete from qna where q_seq=#{q_seq} and m_id=#{m_id}
+ 	</delete>
+ 	
+ 	<!-- qna 댓글 정보 -->
+ 	<select id="u_viewReply" parameterType="reply" resultType="reply">
+ 		select * from reply where q_seq=#{q_seq} 
+ 		order by re_seq desc
+ 	</select>
+ 	
+ 	<!-- qna 댓글 작성 -->
+ 	<insert id="u_insertReply" parameterType="reply">
+ 		insert into reply values((select nvl(max(re_seq),0)+1 from reply),to_char(sysdate,'YYYY-MM-DD HH24:MI'),#{re_content},#{m_id},#{q_seq},null)
+ 	</insert>
+ 	
+ 	<!-- qna 댓글 삭제  -->
+ 	<delete id="u_deleteReply" parameterType="reply">
+ 		delete from reply where re_seq=#{re_seq} and m_id=#{m_id}
+ 	</delete>
+ 	
+    <!-- 회원 정보 -->
+    <select id="viewUser" resultType="member" parameterType="String">
+        select * from member where m_id = #{m_id}
+    </select>
+    <select id="viewUser2" resultType="member_detail" parameterType="String">
+    	select * from member_detail where m_id=#{m_id} 
+    </select>
+    
+    <!-- 비밀번호 확인 -->
+    <select id="passwordConfirm" resultType="member_detail" parameterType="member_detail">
+    	select * from member_detail where m_pw=#{m_pw} and m_id=#{m_id}
+    </select>
+     <!-- 회원 수정 -->
+     <update id="updateUser" parameterType="member">
+     	update member set m_name=#{m_name},
+     	m_email=#{m_email},m_phone=#{m_phone} where m_id=#{m_id}
+     </update>
+     
+     <!-- 회원 수정2 -->
+     <update id="updateUser2" parameterType="member_detail">
+     	update member_detail set m_pw=#{m_pw} where m_id=#{m_id}
+     </update>
+     
+     <!-- 회원 탈퇴 -->
+     <delete id="deleteUser" parameterType="String">
+     	delete from member where m_id=#{m_id}
+     </delete>
+</mapper>

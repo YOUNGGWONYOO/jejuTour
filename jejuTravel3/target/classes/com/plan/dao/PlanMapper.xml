@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Plan">
+ 
+ <!-- 제주도 -->
+ <select id="planList" parameterType="String" resultType="PlanCommand">
+ 	select * from plan where m_id=#{m_id} order by id desc
+ </select>
+ 
+ <!-- planday일렬번호 -->
+ <select id="planDay" parameterType="Integer" resultType="PlanDayCommand">
+ 	select * from plan_day where id=#{p_id}
+ </select>
+ 
+ <!-- planday별 디테일 -->
+ <select id="planDetail" parameterType="Integer" resultType="PlanDetailCommand">
+ 	select * from plan_day_detail where day_seq=#{day_seq}
+ </select>
+ 
+ <select id="planDetail_id" parameterType="Integer" resultType="Integer">
+ 	select id from plan_day_detail where day_seq=#{day_seq}
+ </select>
+ 
+ <select id="planSend" parameterType="Map" resultType="PlanSendCommand">
+ 	select a.day_id, b.id, b.seq, c.t_name ,c.t_id
+ 	from plan_day a join plan_day_detail b on a.day_seq=b.day_seq 
+ 	join tour c on c.t_id=b.t_id 
+ 	where a.id=#{plan_id} and a.day_id=#{selectday}
+ </select>
+ 
+ <select id="planTotalDay" parameterType="Integer" resultType="Integer">
+ 	select max(day_id) from plan_day where id=#{plan_id}
+ </select>
+ <select id="MapSend" parameterType="Map" resultType="PlanMapCommand">
+ 	select c.x,c.y,c.t_name from tour_detail c join plan_day_detail b on b.T_ID=c.T_ID join plan_day a on a.DAY_SEQ=b.DAY_SEQ where a.id=#{plan_id} and a.day_id=#{selectday} order by a.day_id
+
+ </select>
+ <insert id="PlanInsert" parameterType="PlanInsertCommand">
+ 	insert into plan values((select nvl(max(id),0)+1 from plan),#{m_id},#{title},to_date(#{dprt_date},'YY-MM-DD'),to_date(#{arrive_date},'YY-MM-DD'),#{memo})
+ </insert>
+ <insert id="PlanDayInsert" parameterType="Map">
+ 	insert into plan_day values((select nvl(max(day_seq),0)+1 from plan_day),#{day},(select nvl(max(id),0) from plan where m_id=#{m_id} ))
+ </insert>
+ 
+ <select id="planGetId" parameterType="String" resultType="Integer">
+ 	select nvl(max(id),0) from plan where m_id=#{m_id}
+ </select>
+ 
+ <select id="ZZim" parameterType="String" resultType="PlanTourCommand">
+ 	select a.t_id, a.t_name, a.region, a.c_id from tour a join zzim b on a.t_id=b.t_id where b.m_id=#{m_id}
+ </select>
+ 
+ <select id="PlanDaySeq" parameterType="Map" resultType="Integer">
+ 	select day_seq from plan_day where day_id=#{day_id} and id=#{id}
+ </select>
+ 
+ <insert id="PlanDayDetail" parameterType="Map">
+ 	insert into plan_day_detail values((select nvl(max(id),0)+1 from plan_day_detail), #{day_seq}, #{seq}, 1,#{t_id})
+ </insert>
+ <delete id="PlanDeleteDetail" parameterType="Integer">
+ 	delete from plan_day_detail where day_seq=#{day_seq}
+ </delete>
+ 
+ <select id="PlanTour" parameterType="Integer" resultType="PlanMapCommand">
+ 	select x,y,t_name from TOUR_DETAIL where t_id = #{t_id}
+ </select>
+ 
+ <select id="getPlan" parameterType="Integer" resultType="PlanCommand">
+ 	select * from plan where id = #{plan_id}
+ </select>
+ 
+ <update id="planUpdate" parameterType="Map">
+ 	update plan set title=#{planinsertcommand.title}, dprt_date=to_date(#{planinsertcommand.dprt_date},'YY-MM-DD'),arrive_date=to_date(#{planinsertcommand.arrive_date},'YY-MM-DD'),memo=#{planinsertcommand.memo} where id = #{plan_id}
+ </update>
+ 
+ <delete id="minusday" parameterType="Integer">
+ 	delete from plan_day where day_id =(select max(day_id) from plan_day where id=#{plan_id}) and id= #{plan_id}
+ </delete>
+ 
+  <insert id="plusday" parameterType="Integer">
+	insert into plan_day values( (select (max(day_seq)+1) from plan_day), (select (max(day_id)+1) from plan_day where id=#{plan_id}),#{plan_id})
+ </insert>
+ 
+ <delete id="planDelete" parameterType="Integer">
+ 	delete from plan where id =#{plan_id}
+ </delete>
+ 
+ <select id="planSearch" parameterType="String" resultType="PlanTourCommand">
+ 	select a.t_id, a.t_name, a.region, a.c_id from (select * from tour order by DBMS_RANDOM.RANDOM) a where
+      t_keyword like '%'||#{search}||'%' 
+ </select>
+ 
+ 
+</mapper>
+
+
+

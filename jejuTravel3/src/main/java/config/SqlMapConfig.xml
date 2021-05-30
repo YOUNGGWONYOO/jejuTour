@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+ 
+<configuration>
+
+	<settings>
+        <setting name="cacheEnabled" value="false" />
+        <setting name="jdbcTypeForNull" value="NULL" />
+    </settings>
+    
+	<typeAliases>
+		<typeAlias type="jeju.member.command.MemberCommand" alias="member"/>
+		<typeAlias type="jeju.member.command.Member_DetailCommand" alias="member_detail"/>
+		<typeAlias type="jeju.member.command.QnaCommand" alias="qna"/>
+		<typeAlias type="jeju.member.command.ReplyCommand" alias="reply"/>
+		<typeAlias type="jeju.manager.command.ManagerCommand" alias="manager"/>
+		<typeAlias type="jeju.manager.command.NoticeCommand" alias="notice"/>
+		<typeAlias type="jeju.search.command.TourCommand" alias="tour"/>
+		
+		<typeAlias alias="PlanCommand" type="com.plan.domain.PlanCommand"/>
+	    <typeAlias alias="PlanDayCommand" type="com.plan.domain.PlanDayCommand"/>
+	    <typeAlias alias="PlanDetailCommand" type="com.plan.domain.PlanDetailCommand"/>
+	    <typeAlias alias="PlanSendCommand" type="com.plan.domain.PlanSendCommand"/>
+	    <typeAlias alias="PlanMapCommand" type="com.plan.domain.PlanMapCommand"/>
+	    <typeAlias alias="PlanInsertCommand" type="com.plan.domain.PlanInsertCommand"/>
+	    <typeAlias alias="PlanTourCommand" type="com.plan.domain.PlanTourCommand"/>
+	    <typeAlias alias="PlanDayDetailCommand" type="com.plan.domain.PlanDayDetailCommand"/>
+		
+	    <typeAlias alias="TourCommand" type="com.tour.domain.TourCommand"/>
+	    <typeAlias alias="TourDetailCommand" type="com.tour.domain.TourDetailCommand"/>
+	    <typeAlias alias="ReviewCommand" type="com.tour.domain.ReviewCommand"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="sql/Member.xml"/>
+		<mapper resource="sql/Manager.xml"/>
+		<mapper resource="sql/Search.xml"/>
+		
+		<mapper resource="com/plan/dao/PlanMapper.xml"/>
+		
+		<mapper resource="com/tour/dao/TourMapper.xml"/>
+	</mappers>
+	
+	
+
+</configuration>

@@ -1,0 +1,80 @@
+.je-container {
+    width: 100%;
+    margin: 0px auto;
+    border: 1px solid #bcbcbc;
+  }
+.je-header {
+    width: 1140px;
+    border: 1px solid #bcbcbc;
+    margin: auto;
+    position: static;
+  }
+
+.je-topbar {
+    top: -100px;
+    right: 10px;
+    float: right;
+    position: relative;
+}
+.je-topbar ul li{
+    list-style: none;
+    float: left;
+    text-align: center;
+    padding: 6px;
+}
+
+.je-topsearch {
+  top: -90px;
+  right:-60px;
+  float: right;
+  z-index: 2;
+  position: relative;
+}
+
+.je-menubar{
+  width: 1140px;
+  height: 100px;
+  border: 1px solid #bcbcbc;
+  margin: auto;
+  position: static;
+}
+.je-seachregion{
+  width: 1140px;
+  border: 1px solid #bcbcbc;
+  margin: auto;
+  position: static;
+}
+.je-searchcontent{
+  width: 1140px;
+  border: 1px solid #bcbcbc;
+  margin: auto;
+  position: static;
+}
+.je-searchcontent2{
+  margin: auto;
+  margin-top: 10px;
+  border: 1px solid #bcbcbc;
+  position: static;
+}
+.je-searchdetail{
+  width: 1140px;
+  margin: auto;
+  position: static;
+}
+
+.je-content {
+    width: 100%;
+    border: 1px solid #bcbcbc;
+    margin: auto;
+  }
+
+.je-region{
+  width: 1140px;
+  border: 1px solid #bcbcbc;
+  margin: auto;
+}
+
+.je-footer{
+  width:100%;
+  margin: auto;
+}

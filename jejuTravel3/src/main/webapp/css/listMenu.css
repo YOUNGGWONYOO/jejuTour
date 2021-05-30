@@ -1,0 +1,114 @@
+   .content{
+      width:1150px; background:#ffffff; margin:auto; padding-top:30px;
+   }
+   #category{
+      margin:0px 50px 50px -8px;
+   }
+   #c_subid {
+      padding-left:0;
+   }
+   #c_tourid{
+      width: 800px;
+      padding-left:0px;
+
+   }
+   #c_tourid ul{
+      clear:both; 
+      border-top:none;
+   }
+   #c_tourid li{
+      list-style-type:none; 
+      width:150px;
+      height:40px;
+      float:left;
+   }
+   
+   #c_subid ul li{
+      list-style-type:none; 
+      width:150px;
+      height:40px;
+      float:left;
+   }
+    #region{
+      display: flex;
+      margin-left:-25px; 
+      margin-bottom:30px;
+      width:1500px;
+   }
+   #region ul{
+      margin:0;
+   }
+   #region li{
+      list-style-type:none; 
+      width:135px;
+      height:60px;
+      float:left;
+   }
+   #region li a{
+        color:black;
+      font-size:20px;
+      font-weight:bold;
+      padding:1px;
+      border:1px solid rgb(26,93,88,0.5);
+      border-radius: 1px;
+      display:block;
+      line-height:40px;
+      text-align:center;
+   }
+   #region li a.selected{
+      background:#268d88;
+      text-decoration:none;
+      color:black;
+      cursor:default;
+   } 
+
+   #c_tourid li a{
+        color:black;
+      font-size:large;
+      font-weight:bold;
+      border-radius: 1px;
+      border:1px solid rgb(26,93,88,0.5);
+      display:block;
+      color:black;
+      line-height:40px; 
+      text-align:center;
+
+   }
+   #c_tourid li a.selected{
+      background: #268d88;
+      text-decoration:none;
+       color:black;
+      cursor:default;
+   }
+    #c_subid ul{
+      clear:both; 
+   } 
+   
+   #c_subid li{
+      font-size:large;
+       font-weight:bold;
+      list-style-type:none;
+      padding:3px;
+       color:black;
+   }
+   #c_subid div li a{
+      text-decoration:none;
+      border:1px solid #268d88;
+      border-radius: 50px;
+      padding:3px;
+      margin:10px;
+      display:block; 
+      color:black;
+      text-align:center;
+   }
+   #c_subid div li a.selected{
+      background:#268d88;
+      color:white;
+      cursor:default;
+   }
+   
+   #regionName > h2{
+      padding-left:50px;
+      font-size:xx-large;
+      
+   }
