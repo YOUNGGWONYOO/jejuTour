@@ -1,0 +1,182 @@
+create table member(m_id varchar2(30) not null,
+		  m_name varchar2(30) not null,
+		  m_email varchar2(30) not null,
+		  m_phone varchar2(30) not null,
+  		  m_date date not null);
+
+create table plan (id number not null,
+	           m_id varchar2(20)		NOT NULL,
+	           title	varchar2(20)		NOT NULL,
+	           dprt_date	date		NOT NULL,
+	           arrive_date	date		NOT NULL,
+	           memo	varchar2(100)		NULL);
+
+CREATE TABLE plan_day (
+	day_seq	number		NOT NULL,
+	day_id	number		NOT NULL,
+	id	number		NOT NULL
+);
+
+CREATE TABLE plan_day_detail (
+	id	number		NOT NULL,
+	day_seq	number		NOT NULL,
+	seq	number		NOT NULL,
+	time	number	DEFAULT 1	NOT NULL,
+	t_id	number		NOT NULL
+);
+
+ALTER TABLE member ADD CONSTRAINT PK_MEMBER PRIMARY KEY (
+	m_id
+);
+
+ALTER TABLE plan ADD CONSTRAINT PK_PLAN PRIMARY KEY (
+	id
+);
+
+ALTER TABLE plan_day ADD CONSTRAINT PK_PLAN_DAY PRIMARY KEY (
+	day_seq
+);
+
+ALTER TABLE plan_day_detail ADD CONSTRAINT PK_PLAN_DAY_DETAIL PRIMARY KEY (
+	id
+);
+
+CREATE TABLE  member_detail (
+	m_id	varchar2(20)		NOT NULL,
+	m_pw	varchar2(20)		NOT NULL
+);
+
+
+ALTER TABLE  member_detail     ADD CONSTRAINT   PK_MEMBER_DETAIL     PRIMARY KEY (m_id);
+
+
+ALTER TABLE   member_detail   ADD CONSTRAINT   FK_member_TO_member_detail   FOREIGN KEY (m_id)
+REFERENCES    member(m_id);
+
+
+
+CREATE TABLE category (
+	c_id	number		NOT NULL,
+	c_tourid	number		NOT NULL,
+	c_subid	number		NOT NULL
+);
+
+
+ALTER TABLE category ADD CONSTRAINT PK_CATEGORY PRIMARY KEY (
+	c_id
+);
+
+
+CREATE TABLE  tour (
+	t_id	number		NOT NULL,
+	t_name	varchar2(30)		NOT NULL,
+	region	number		NOT NULL,
+	c_id	number		NOT NULL,
+	like_cnt    number		NOT NULL,
+	t_keyword  varchar2(60)       NOT NULL
+);
+
+ALTER TABLE  tour  ADD CONSTRAINT PK_TOUR PRIMARY KEY (t_id);
+
+
+CREATE TABLE  tour_detail (
+	t_id	number		NOT NULL,
+	t_name	varchar2(30)		NOT NULL,
+	t_addr	varchar2(150)		NOT NULL,
+	x	varchar2(20)		NOT NULL,
+	y	varchar2(20)		NOT NULL,
+	t_content 	varchar2(3000)		NULL,
+	t_img	number		NULL
+);
+
+ALTER TABLE   tour_detail   ADD CONSTRAINT   PK_TOUR_DETAIL   PRIMARY KEY (t_id);
+
+
+ALTER TABLE  tour_detail   ADD CONSTRAINT   FK_tour_TO_tour_detail   FOREIGN KEY (t_id)
+REFERENCES   tour (t_id);
+
+CREATE TABLE  zzim(
+	id	number		NOT NULL,
+	m_id	varchar2(20)	NOT NULL,
+	t_id	number		NOT NULL
+);
+
+ALTER TABLE  zzim  ADD CONSTRAINT  PK_ZZIM  PRIMARY KEY(id);
+
+
+CREATE TABLE   good (
+	id	number		NOT NULL,
+	t_id	number		NOT NULL,
+	m_id	varchar2(20)		NOT NULL,
+	good_check	number		NOT NULL
+);
+
+ALTER TABLE  good  ADD CONSTRAINT  PK_GOOD   PRIMARY KEY(id);
+
+
+CREATE TABLE   review(
+	r_id	number		NOT NULL,
+	write_date	date      default   sysdate	NOT NULL,
+	r_content 	varchar2(100)	NOT NULL,
+	t_id	number		NOT NULL,
+	m_id	varchar2(20)		NOT NULL
+);
+
+ALTER TABLE   review   ADD CONSTRAINT   PK_REVIEW    PRIMARY KEY (r_id);
+
+create table manager(
+	mgr_id varchar2(30) not null,
+	mgr_pw varchar2(30) not null,
+	constraint pk_mgr_id primary key(mgr_id));
+
+create table qna (
+	q_seq number not null,
+	m_id varchar2(30) not null,
+	q_subject varchar2(100) not null,
+	q_content varchar2(4000) not null,
+	q_write_date varchar2(20) not null,
+	constraint pk_q_seq primary key(q_seq),
+	constraint fk_m_id_to_qna foreign key(m_id)
+	references member(m_id) on delete cascade);
+
+create table notice (
+	n_seq number not null,
+	mgr_id varchar2(30) not null,
+	n_subject varchar2(100) not null,
+	n_content varchar2(4000) not null,
+	n_write_date varchar2(20) not null,
+	constraint pk_n_seq primary key(n_seq),
+	constraint fk_mgr_id_to_notice foreign key(mgr_id)
+	references manager(mgr_id) on delete cascade);
+
+create table reply (
+	re_seq number not null,
+	re_write_date varchar2(20) not null,
+	re_content varchar2(1000) not null,
+	m_id varchar2(30),
+	q_seq number not null,
+	mgr_id varchar2(30),
+	constraint fk_m_id_to_reply foreign key(m_id)
+	references member(m_id) on delete cascade,
+	constraint fk_q_seq_to_reply foreign key(q_seq)
+	references qna(q_seq) on delete cascade,
+	constraint fk_mgr_id_to_reply foreign key(mgr_id)
+	references manager(mgr_id) on delete cascade);
+
+alter table zzim add constraint fk_member_detail_to_zzim foreign key(m_id)
+references member_detail(m_id) on delete cascade;
+
+alter table good add constraint fk_member_detail_to_good foreign key(m_id)
+references member_detail(m_id) on delete cascade;
+
+alter table review add constraint fk_member_detail_to_review foreign key(m_id)
+references member_detail(m_id) on delete cascade;
+
+alter table plan add constraint fk_member_to_plan foreign key(m_id)
+references member(m_id) on delete cascade;
+
+alter table plan_day add constraint fk_plan_to_plan_day foreign key(id)
+references plan(id) on delete cascade;
+
+alter table plan_day_detail add constraint fk_plan_day_to_plan_day_detail foreign key(day_seq)
+references plan_day(day_seq) on delete cascade;
